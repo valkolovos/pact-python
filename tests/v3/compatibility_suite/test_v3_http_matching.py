@@ -3,6 +3,7 @@
 import pickle
 import re
 from pathlib import Path
+from typing import Generator
 
 import pytest
 from pytest_bdd import (
@@ -125,7 +126,9 @@ def an_expected_request_with_header(name: str, value: str, temp_dir: Path) -> No
 
 
 @when("the request is compared to the expected one", target_fixture="provider_url")
-def the_request_is_compared_to_the_expected_one(temp_dir: Path) -> None:
+def the_request_is_compared_to_the_expected_one(
+    temp_dir: Path,
+) -> Generator[URL, None, None]:
     """The request is compared to the expected one."""
     yield from start_provider(temp_dir)
 
@@ -165,7 +168,7 @@ def the_comparison_should_not_be_ok(
 @then(
     parsers.parse(
         'the mismatches will contain a mismatch with error "{mismatch_key}" '
-        "-> \"Expected header '{header_name}' to have value '{expected_value}'"
+        "-> \"Expected header '{header_name}' to have value '{expected_value}' "
         "but was '{actual_value}'\""
     )
 )
